@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Calculator</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .calculator {
+            width: 340px;
+            padding: 25px;
+
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 25px;
+
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .display {
+            width: 100%;
+            height: 75px;
+
+            border: none;
+            outline: none;
+            border-radius: 15px;
+
+            background: rgba(255, 255, 255, 0.9);
+
+            text-align: right;
+            padding: 10px 15px;
+
+            font-size: 30px;
+            color: #333;
+
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 60px;
+
+            border: none;
+            border-radius: 15px;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            background: rgba(255, 255, 255, 0.85);
+            color: #333;
+
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .operator {
+            background: #ff9f43;
+            color: white;
+        }
+
+        .operator:hover {
+            background: #ff8c1a;
+        }
+
+        .clear {
+            background: #ff4757;
+            color: white;
+        }
+
+        .clear:hover {
+            background: #e84118;
+        }
+
+        .equal {
+            background: #2ed573;
+            color: white;
+
+            grid-row: span 2;
+            height: 130px;
+        }
+
+        .equal:hover {
+            background: #20bf6b;
+        }
+
+        .zero {
+            grid-column: span 2;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        <div class="title">
+            🧮 Smart Calculator
+        </div>
+
+        <input
+            type="text"
+            id="display"
+            class="display"
+            placeholder="0"
+            readonly
+        >
+
+        <div class="buttons">
+
+            <!-- First Row -->
+            <button class="clear" onclick="clearDisplay()">AC</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button class="operator" onclick="add('%')">%</button>
+            <button class="operator" onclick="add('/')">÷</button>
+
+            <!-- Second Row -->
+            <button onclick="add('7')">7</button>
+            <button onclick="add('8')">8</button>
+            <button onclick="add('9')">9</button>
+            <button class="operator" onclick="add('*')">×</button>
+
+            <!-- Third Row -->
+            <button onclick="add('4')">4</button>
+            <button onclick="add('5')">5</button>
+            <button onclick="add('6')">6</button>
+            <button class="operator" onclick="add('-')">−</button>
+
+            <!-- Fourth Row -->
+            <button onclick="add('1')">1</button>
+            <button onclick="add('2')">2</button>
+            <button onclick="add('3')">3</button>
+
+            <button class="equal" onclick="calculate()">=</button>
+
+            <!-- Fifth Row -->
+            <button class="zero" onclick="add('0')">0</button>
+            <button onclick="add('.')">.</button>
+
+            <button class="operator" onclick="add('+')">+</button>
+
+        </div>
+
+        <div class="footer">
+            Simple • Fast • Smart
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // Add value to display
+        function add(value) {
+            document.getElementById("display").value += value;
+        }
+
+
+        // Clear everything
+        function clearDisplay() {
+            document.getElementById("display").value = "";
+        }
+
+
+        // Delete last character
+        function deleteLast() {
+
+            let display = document.getElementById("display");
+
+            display.value = display.value.slice(0, -1);
+        }
+
+
+        // Calculate result
+        function calculate() {
+
+            let display = document.getElementById("display");
+
+            try {
+
+                if (display.value === "") {
+                    return;
+                }
+
+                display.value = eval(display.value);
+
+            } catch {
+
+                display.value = "Error";
+
+            }
+        }
+
+
+        // Keyboard support
+        document.addEventListener("keydown", function(event) {
+
+            const key = event.key;
+
+            if (
+                (key >= "0" && key <= "9") ||
+                key === "+" ||
+                key === "-" ||
+                key === "*" ||
+                key === "/" ||
+                key === "."
+            ) {
+                add(key);
+            }
+
+            else if (key === "Enter") {
+                calculate();
+            }
+
+            else if (key === "Backspace") {
+                deleteLast();
+            }
+
+            else if (key === "Escape") {
+                clearDisplay();
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
